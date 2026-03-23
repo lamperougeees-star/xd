@@ -1,4 +1,4 @@
-// ==================== WELCOME MESSAGE ====================
+// ==================== SLIDER ====================
 const overlay = document.getElementById('welcome-overlay');
 const choiceScreen = document.getElementById('choice-screen');
 const loginScreen = document.getElementById('login-screen');
@@ -6,13 +6,91 @@ const registerScreen = document.getElementById('register-screen');
 const continueScreen = document.getElementById('continue-screen');
 const scaryScreen = document.getElementById('scary-screen');
 
-setTimeout(() => {
-  overlay.classList.add('fade-out');
+const thumb = document.getElementById('slider-thumb');
+const track = document.getElementById('slider-track');
+const fill = document.getElementById('slider-fill');
+const sliderText = document.getElementById('slider-text');
+
+let dragging = false;
+let startX = 0;
+let thumbX = 0;
+let maxX = 0;
+let unlocked = false;
+
+function getMaxX() {
+  return track.offsetWidth - thumb.offsetWidth - 8;
+}
+
+function onStart(e) {
+  if (unlocked) return;
+  dragging = true;
+  startX = (e.touches ? e.touches[0].clientX : e.clientX) - thumbX;
+  maxX = getMaxX();
+  thumb.style.transition = 'none';
+  fill.style.transition = 'none';
+}
+
+function onMove(e) {
+  if (!dragging || unlocked) return;
+  e.preventDefault();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  let newX = clientX - startX;
+  newX = Math.max(0, Math.min(newX, maxX));
+  thumbX = newX;
+  thumb.style.left = (4 + newX) + 'px';
+  fill.style.width = (newX + thumb.offsetWidth / 2) + 'px';
+
+  const progress = newX / maxX;
+  sliderText.style.opacity = Math.max(0, 1 - progress * 2);
+
+  if (progress > 0.85) {
+    unlock();
+  }
+}
+
+function onEnd() {
+  if (!dragging || unlocked) return;
+  dragging = false;
+  thumb.style.transition = 'left 0.3s ease';
+  fill.style.transition = 'width 0.3s ease';
+  thumbX = 0;
+  thumb.style.left = '4px';
+  fill.style.width = '0px';
+  sliderText.style.opacity = '';
+}
+
+function unlock() {
+  unlocked = true;
+  dragging = false;
+  thumb.classList.add('unlocked');
+  thumb.textContent = '✓';
+  thumb.style.transition = 'left 0.2s ease';
+  fill.style.transition = 'width 0.2s ease';
+  thumb.style.left = (4 + maxX) + 'px';
+  fill.style.width = '100%';
+  sliderText.textContent = 'Добро пожаловать!';
+  sliderText.style.opacity = '1';
+  sliderText.style.color = '#fff';
+  sliderText.style.animation = 'none';
+
   setTimeout(() => {
-    overlay.remove();
-    choiceScreen.classList.remove('hidden');
-  }, 500);
-}, 2000);
+    overlay.classList.add('fade-out');
+    setTimeout(() => {
+      overlay.remove();
+      choiceScreen.classList.remove('hidden');
+    }, 500);
+  }, 600);
+}
+
+// Mouse events
+thumb.addEventListener('mousedown', onStart);
+window.addEventListener('mousemove', onMove);
+window.addEventListener('mouseup', onEnd);
+
+// Touch events
+thumb.addEventListener('touchstart', onStart, { passive: true });
+window.addEventListener('touchmove', onMove, { passive: false });
+window.addEventListener('touchend', onEnd);
 
 // ==================== ВЫБОР ====================
 document.getElementById('go-login-btn').addEventListener('click', () => {
