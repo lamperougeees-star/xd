@@ -1,20 +1,20 @@
 const express = require('express');
-const Database = require('better-sqlite3');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
-const db = new Database('users.db');
+const DB_FILE = path.join(__dirname, 'users.json');
 
-// Create users table
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+// Simple JSON-based storage
+function loadUsers() {
+  if (!fs.existsSync(DB_FILE)) return [];
+  return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+}
+
+function saveUsers(users) {
+  fs.writeFileSync(DB_FILE, JSON.stringify(users, null, 2));
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,13 +35,15 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({ error: 'Пароль должен быть не менее 6 символов' });
   }
 
-  const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+  const users = loadUsers();
+  const existing = users.find(u => u.email === email);
   if (existing) {
     return res.status(409).json({ error: 'Этот email уже зарегистрирован' });
   }
 
   const hash = await bcrypt.hash(password, 10);
-  db.prepare('INSERT INTO users (email, password) VALUES (?, ?)').run(email, hash);
+  users.push({ email, password: hash, created_at: new Date().toISOString() });
+  saveUsers(users);
 
   res.json({ success: true });
 });
