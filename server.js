@@ -48,6 +48,27 @@ app.post('/api/register', async (req, res) => {
   res.json({ success: true });
 });
 
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email и пароль обязательны' });
+  }
+
+  const users = loadUsers();
+  const user = users.find(u => u.email === email);
+  if (!user) {
+    return res.status(401).json({ error: 'Неверный email или пароль' });
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    return res.status(401).json({ error: 'Неверный email или пароль' });
+  }
+
+  res.json({ success: true });
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);
