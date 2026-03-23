@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добро пожаловать</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Приветственное сообщение -->
+  <div id="welcome-overlay">
+    <div id="welcome-message">Ну привет</div>
+  </div>
+
+  <!-- Форма регистрации -->
+  <div id="register-screen" class="hidden">
+    <div id="register-box">
+      <h2>Регистрация</h2>
+      <form id="register-form">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="example@mail.com" required />
+        </div>
+        <div class="field">
+          <label>Пароль</label>
+          <input type="password" id="password" placeholder="Минимум 6 символов" required />
+        </div>
+        <div class="field">
+          <label>Повторите пароль</label>
+          <input type="password" id="confirm-password" placeholder="Повторите пароль" required />
+        </div>
+        <div id="error-msg" class="error hidden"></div>
+        <button type="submit" id="submit-btn">Зарегистрироваться</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Кнопка продолжить -->
+  <div id="continue-screen" class="hidden">
+    <button id="continue-btn">Продолжить</button>
+  </div>
+
+  <!-- Страшный экран -->
+  <div id="scary-screen" class="hidden">
+    <div id="blood-container"></div>
+    <div id="scary-text">ТЫ УЖЕ НЕ ВЫЙДЕШЬ</div>
+    <div id="scary-eyes">👁️ 👁️</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

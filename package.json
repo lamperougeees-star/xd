@@ -1,0 +1,14 @@
+{
+  "name": "scary-site",
+  "version": "1.0.0",
+  "description": "Scary registration site",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^9.4.3",
+    "bcrypt": "^5.1.1"
+  }
+}
