@@ -1,5 +1,7 @@
 // ==================== WELCOME MESSAGE ====================
 const overlay = document.getElementById('welcome-overlay');
+const choiceScreen = document.getElementById('choice-screen');
+const loginScreen = document.getElementById('login-screen');
 const registerScreen = document.getElementById('register-screen');
 const continueScreen = document.getElementById('continue-screen');
 const scaryScreen = document.getElementById('scary-screen');
@@ -8,54 +10,46 @@ setTimeout(() => {
   overlay.classList.add('fade-out');
   setTimeout(() => {
     overlay.remove();
-    registerScreen.classList.remove('hidden');
+    choiceScreen.classList.remove('hidden');
   }, 500);
 }, 2000);
 
-// ==================== TABS ====================
-const tabs = document.querySelectorAll('.tab');
-const registerForm = document.getElementById('register-form');
-const loginForm = document.getElementById('login-form');
+// ==================== ВЫБОР ====================
+document.getElementById('go-login-btn').addEventListener('click', () => {
+  choiceScreen.classList.add('hidden');
+  loginScreen.classList.remove('hidden');
+});
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    if (tab.dataset.tab === 'register') {
-      registerForm.classList.remove('hidden');
-      loginForm.classList.add('hidden');
-    } else {
-      loginForm.classList.remove('hidden');
-      registerForm.classList.add('hidden');
-    }
-    hideError();
-    hideLoginError();
-  });
+document.getElementById('go-register-btn').addEventListener('click', () => {
+  choiceScreen.classList.add('hidden');
+  registerScreen.classList.remove('hidden');
+});
+
+document.getElementById('back-from-login').addEventListener('click', () => {
+  loginScreen.classList.add('hidden');
+  choiceScreen.classList.remove('hidden');
+});
+
+document.getElementById('back-from-register').addEventListener('click', () => {
+  registerScreen.classList.add('hidden');
+  choiceScreen.classList.remove('hidden');
 });
 
 // ==================== REGISTRATION ====================
 const form = document.getElementById('register-form');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const confirmInput = document.getElementById('confirm-password');
 const errorMsg = document.getElementById('error-msg');
 const submitBtn = document.getElementById('submit-btn');
 
-function showError(msg) {
-  errorMsg.textContent = msg;
-  errorMsg.classList.remove('hidden');
-}
-function hideError() {
-  errorMsg.classList.add('hidden');
-}
+function showError(msg) { errorMsg.textContent = msg; errorMsg.classList.remove('hidden'); }
+function hideError() { errorMsg.classList.add('hidden'); }
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   hideError();
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-  const confirm = confirmInput.value;
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm-password').value;
 
   if (password !== confirm) { showError('Пароли не совпадают'); return; }
   if (password.length < 6) { showError('Пароль должен быть не менее 6 символов'); return; }
@@ -78,7 +72,7 @@ form.addEventListener('submit', async (e) => {
     }
     registerScreen.classList.add('hidden');
     continueScreen.classList.remove('hidden');
-  } catch (err) {
+  } catch {
     showError('Нет соединения с сервером');
     submitBtn.disabled = false;
     submitBtn.textContent = 'Зарегистрироваться';
@@ -87,25 +81,18 @@ form.addEventListener('submit', async (e) => {
 
 // ==================== LOGIN ====================
 const loginFormEl = document.getElementById('login-form');
-const loginEmailInput = document.getElementById('login-email');
-const loginPasswordInput = document.getElementById('login-password');
 const loginErrorMsg = document.getElementById('login-error-msg');
 const loginBtn = document.getElementById('login-btn');
 
-function showLoginError(msg) {
-  loginErrorMsg.textContent = msg;
-  loginErrorMsg.classList.remove('hidden');
-}
-function hideLoginError() {
-  loginErrorMsg.classList.add('hidden');
-}
+function showLoginError(msg) { loginErrorMsg.textContent = msg; loginErrorMsg.classList.remove('hidden'); }
+function hideLoginError() { loginErrorMsg.classList.add('hidden'); }
 
 loginFormEl.addEventListener('submit', async (e) => {
   e.preventDefault();
   hideLoginError();
 
-  const email = loginEmailInput.value.trim();
-  const password = loginPasswordInput.value;
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
 
   loginBtn.disabled = true;
   loginBtn.textContent = 'Вход...';
@@ -123,9 +110,9 @@ loginFormEl.addEventListener('submit', async (e) => {
       loginBtn.textContent = 'Войти';
       return;
     }
-    registerScreen.classList.add('hidden');
+    loginScreen.classList.add('hidden');
     continueScreen.classList.remove('hidden');
-  } catch (err) {
+  } catch {
     showLoginError('Нет соединения с сервером');
     loginBtn.disabled = false;
     loginBtn.textContent = 'Войти';
@@ -145,27 +132,19 @@ continueBtn.addEventListener('click', () => {
 });
 
 function startBlood() {
-  const count = 35;
-  for (let i = 0; i < count; i++) {
-    setTimeout(() => spawnBloodDrop(), i * 120);
-  }
+  for (let i = 0; i < 35; i++) setTimeout(() => spawnBloodDrop(), i * 120);
   setInterval(() => {
-    for (let i = 0; i < 8; i++) {
-      setTimeout(() => spawnBloodDrop(), i * 150);
-    }
+    for (let i = 0; i < 8; i++) setTimeout(() => spawnBloodDrop(), i * 150);
   }, 3000);
 }
 
 function spawnBloodDrop() {
   const drop = document.createElement('div');
   drop.className = 'blood-drop';
-  const x = Math.random() * 100;
-  const width = 10 + Math.random() * 16;
-  const height = 80 + Math.random() * 200;
   const duration = 2 + Math.random() * 3;
-  drop.style.left = `${x}%`;
-  drop.style.width = `${width}px`;
-  drop.style.height = `${height}px`;
+  drop.style.left = `${Math.random() * 100}%`;
+  drop.style.width = `${10 + Math.random() * 16}px`;
+  drop.style.height = `${80 + Math.random() * 200}px`;
   drop.style.animationDuration = `${duration}s`;
   bloodContainer.appendChild(drop);
   setTimeout(() => drop.remove(), duration * 1000 + 500);
@@ -176,8 +155,7 @@ function startFlash() {
   const interval = setInterval(() => {
     scaryScreen.classList.add('scary-flash');
     setTimeout(() => scaryScreen.classList.remove('scary-flash'), 100);
-    count++;
-    if (count > 5) clearInterval(interval);
+    if (++count > 5) clearInterval(interval);
   }, 300);
 }
 
@@ -187,8 +165,7 @@ function startScarySound() {
     function playCreepyNote(freq, startTime, duration, type = 'sawtooth') {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = type;
       osc.frequency.setValueAtTime(freq, ctx.currentTime + startTime);
       osc.frequency.exponentialRampToValueAtTime(freq * 0.3, ctx.currentTime + startTime + duration);
