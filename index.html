@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Не грусти</title>
+  <link rel="stylesheet" href="css/work.css">
+</head>
+<body>
+
+  <!-- Свайп-экран -->
+  <div id="welcome-overlay">
+    <div id="slider-container">
+      <div id="slider-track">
+        <div id="slider-text">Проведи чтобы войти →</div>
+        <div id="slider-thumb">→</div>
+        <div id="slider-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Выбор: войти или зарегистрироваться -->
+  <div id="choice-screen" class="hidden">
+    <div id="choice-box">
+      <h2>Добро пожаловать</h2>
+      <button id="go-login-btn" class="choice-btn">Войти в профиль</button>
+      <button id="go-register-btn" class="choice-btn secondary">Зарегистрироваться</button>
+    </div>
+  </div>
+
+  <!-- Форма входа -->
+  <div id="login-screen" class="hidden">
+    <div id="register-box">
+      <button class="back-btn" id="back-from-login">← Назад</button>
+      <h2>Войти</h2>
+      <form id="login-form">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="example@mail.com" required />
+        </div>
+        <div class="field">
+          <label>Пароль</label>
+          <input type="password" id="login-password" placeholder="Ваш пароль" required />
+        </div>
+        <div id="login-error-msg" class="error hidden"></div>
+        <button type="submit" id="login-btn">Войти</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Форма регистрации -->
+  <div id="register-screen" class="hidden">
+    <div id="register-box">
+      <button class="back-btn" id="back-from-register">← Назад</button>
+      <h2>Регистрация</h2>
+      <form id="register-form">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="example@mail.com" required />
+        </div>
+        <div class="field">
+          <label>Пароль</label>
+          <input type="password" id="password" placeholder="Минимум 6 символов" required />
+        </div>
+        <div class="field">
+          <label>Повторите пароль</label>
+          <input type="password" id="confirm-password" placeholder="Повторите пароль" required />
+        </div>
+        <div id="error-msg" class="error hidden"></div>
+        <button type="submit" id="submit-btn">Зарегистрироваться</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Экран подтверждения email -->
+  <div id="verify-screen" class="hidden">
+    <div id="verify-box">
+      <button class="back-btn" id="back-from-verify">← Назад</button>
+      <div class="verify-icon">✉️</div>
+      <h2>Подтверждение email</h2>
+      <p class="verify-subtitle">Мы отправили 6-значный код на вашу почту</p>
+      <p class="verify-email" id="verify-email-display"></p>
+      <form id="verify-form">
+        <div class="code-inputs">
+          <input type="text" maxlength="1" class="code-digit" data-index="0" inputmode="numeric" autocomplete="off" />
+          <input type="text" maxlength="1" class="code-digit" data-index="1" inputmode="numeric" autocomplete="off" />
+          <input type="text" maxlength="1" class="code-digit" data-index="2" inputmode="numeric" autocomplete="off" />
+          <input type="text" maxlength="1" class="code-digit" data-index="3" inputmode="numeric" autocomplete="off" />
+          <input type="text" maxlength="1" class="code-digit" data-index="4" inputmode="numeric" autocomplete="off" />
+          <input type="text" maxlength="1" class="code-digit" data-index="5" inputmode="numeric" autocomplete="off" />
+        </div>
+        <div id="verify-error-msg" class="error hidden"></div>
+        <button type="submit" id="verify-btn">Подтвердить</button>
+      </form>
+      <div class="resend-section">
+        <span id="resend-timer">Отправить повторно через <span id="timer-count">60</span>с</span>
+        <button id="resend-btn" class="resend-link hidden">Отправить код повторно</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Кнопка продолжить -->
+  <div id="continue-screen" class="hidden">
+    <button id="continue-btn">Продолжить</button>
+  </div>
+
+  <!-- Страшный экран -->
+  <div id="scary-screen" class="hidden">
+    <div id="blood-container"></div>
+    <div id="scary-text">ТЫ УЖЕ НЕ ВЫЙДЕШЬ</div>
+    <div id="scary-eyes">👁️ 👁️</div>
+  </div>
+
+  <script src="work.js"></script>
+</body>
+</html>
