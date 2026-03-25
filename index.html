@@ -3,266 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Yuki Shop — войди или зарегистрируйся">
-  <title>Yuki Shop</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="css/work.css" as="style">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/work.css">
+  <title>Yuki Shop — Маркетплейс</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Свайп-экран -->
-  <div id="welcome-overlay">
-    <div id="slider-container">
-      <div class="welcome-title">
-        <span class="welcome-emoji">👋</span>
-        <span class="welcome-word">Ну привет!</span>
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo" onclick="navigate('home')">✦ Yuki</a>
+      <div class="nav-search">
+        <input type="text" id="nav-search-input" placeholder="Поиск объявлений..." />
+        <button onclick="searchFromNav()">⌕</button>
       </div>
-      <div id="slider-track">
-        <div id="slider-text">Проведи чтобы войти →</div>
-        <div id="slider-thumb">→</div>
-        <div id="slider-fill"></div>
+      <div class="nav-links">
+        <a href="#" onclick="navigate('home')">Каталог</a>
+        <a href="#" onclick="navigate('create')" class="nav-create" id="nav-create-btn">＋ Создать</a>
+        <a href="#" onclick="navigate('chats')" id="nav-chats-btn" class="hidden">💬 <span id="unread-badge" class="badge hidden">0</span></a>
+        <a href="#" onclick="navigate('profile')" id="nav-profile-btn" class="hidden">Профиль</a>
+        <a href="#" onclick="navigate('admin')" id="nav-admin-btn" class="hidden">Модерация</a>
+        <a href="#" onclick="navigate('auth')" id="nav-auth-btn">Войти</a>
+        <a href="#" onclick="doLogout()" id="nav-logout-btn" class="hidden">Выйти</a>
       </div>
+      <button class="burger" onclick="toggleMenu()">☰</button>
     </div>
-  </div>
+    <div class="mobile-menu hidden" id="mobile-menu">
+      <a href="#" onclick="navigate('home');toggleMenu()">Каталог</a>
+      <a href="#" onclick="navigate('create');toggleMenu()">＋ Создать</a>
+      <a href="#" onclick="navigate('chats');toggleMenu()" id="mob-chats-btn" class="hidden">💬 Чаты</a>
+      <a href="#" onclick="navigate('profile');toggleMenu()" id="mob-profile-btn" class="hidden">Профиль</a>
+      <a href="#" onclick="navigate('admin');toggleMenu()" id="mob-admin-btn" class="hidden">Модерация</a>
+      <a href="#" onclick="navigate('auth');toggleMenu()" id="mob-auth-btn">Войти</a>
+      <a href="#" onclick="doLogout();toggleMenu()" id="mob-logout-btn" class="hidden">Выйти</a>
+    </div>
+  </nav>
 
-  <!-- Выбор: войти или зарегистрироваться -->
-  <div id="choice-screen" class="hidden screen-transition">
-    <div id="choice-box" class="card">
-      <div class="card-icon">🌙</div>
-      <h2>Добро пожаловать</h2>
-      <p class="card-subtitle">Выберите действие для продолжения</p>
-      <div class="btn-group">
-        <button id="go-login-btn" class="btn btn-primary">
-          <span class="btn-icon">🔑</span> Войти в профиль
-        </button>
-        <button id="go-register-btn" class="btn btn-secondary">
-          <span class="btn-icon">✨</span> Зарегистрироваться
-        </button>
+  <!-- PAGES -->
+  <main id="app">
+
+    <!-- HOME / LISTINGS -->
+    <section id="page-home" class="page">
+      <div class="page-header">
+        <h1>Объявления</h1>
+        <p class="subtitle">Покупай и продавай что угодно</p>
       </div>
-    </div>
-  </div>
-
-  <!-- Форма входа -->
-  <div id="login-screen" class="hidden screen-transition">
-    <div id="login-box" class="card">
-      <button class="back-btn" id="back-from-login" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🔑</div>
-      <h2>Войти</h2>
-      <p class="card-subtitle">Введите ваши данные</p>
-      <form id="login-form" novalidate>
-        <div class="field">
-          <label for="login-email">Email</label>
-          <div class="input-wrap">
-            <span class="input-icon">✉</span>
-            <input type="email" id="login-email" placeholder="example@mail.com" required autocomplete="email" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="login-password">Пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="login-password" placeholder="Ваш пароль" required autocomplete="current-password" />
-          </div>
-        </div>
-        <div id="login-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="login-btn" class="btn btn-primary full-width">
-          Войти
-        </button>
-      </form>
-      <div class="forgot-section">
-        <button id="forgot-password-btn" type="button" class="resend-link">Забыли пароль?</button>
+      <div class="filters-bar">
+        <div class="filter-cats" id="filter-cats"></div>
+        <select id="filter-sort" onchange="loadListings()">
+          <option value="newest">Новые</option>
+          <option value="price_asc">Цена ↑</option>
+          <option value="price_desc">Цена ↓</option>
+        </select>
       </div>
-    </div>
-  </div>
-
-  <!-- Экран: Забыли пароль (ввод email) -->
-  <div id="forgot-screen" class="hidden screen-transition">
-    <div id="forgot-box" class="card">
-      <button class="back-btn" id="back-from-forgot" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🔐</div>
-      <h2>Забыли пароль?</h2>
-      <p class="card-subtitle">Введите email для сброса пароля</p>
-      <form id="forgot-form" novalidate>
-        <div class="field">
-          <label for="forgot-email">Email</label>
-          <div class="input-wrap">
-            <span class="input-icon">✉</span>
-            <input type="email" id="forgot-email" placeholder="example@mail.com" required autocomplete="email" />
-          </div>
-        </div>
-        <div id="forgot-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="forgot-btn" class="btn btn-primary full-width">
-          Отправить код
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Экран: Ввод кода сброса -->
-  <div id="reset-code-screen" class="hidden screen-transition">
-    <div id="reset-code-box" class="card">
-      <button class="back-btn" id="back-from-reset-code" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🔏</div>
-      <h2>Введите код</h2>
-      <p class="card-subtitle">Мы отправили код на вашу почту</p>
-      <p class="verify-email" id="reset-email-display"></p>
-      <form id="reset-code-form" novalidate>
-        <div class="code-inputs" role="group" aria-label="Введите 6-значный код">
-          <input type="text" maxlength="1" class="code-digit" data-index="0" inputmode="numeric" autocomplete="off" aria-label="Цифра 1" />
-          <input type="text" maxlength="1" class="code-digit" data-index="1" inputmode="numeric" autocomplete="off" aria-label="Цифра 2" />
-          <input type="text" maxlength="1" class="code-digit" data-index="2" inputmode="numeric" autocomplete="off" aria-label="Цифра 3" />
-          <input type="text" maxlength="1" class="code-digit" data-index="3" inputmode="numeric" autocomplete="off" aria-label="Цифра 4" />
-          <input type="text" maxlength="1" class="code-digit" data-index="4" inputmode="numeric" autocomplete="off" aria-label="Цифра 5" />
-          <input type="text" maxlength="1" class="code-digit" data-index="5" inputmode="numeric" autocomplete="off" aria-label="Цифра 6" />
-        </div>
-        <div id="reset-code-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="reset-code-btn" class="btn btn-primary full-width">
-          Продолжить
-        </button>
-      </form>
-      <div class="resend-section">
-        <span id="reset-resend-timer">Отправить повторно через <span id="reset-timer-count">60</span>с</span>
-        <button id="reset-resend-btn" class="resend-link hidden" type="button">Отправить код повторно</button>
+      <div id="listings-grid" class="listings-grid"></div>
+      <div id="listings-pagination" class="pagination"></div>
+      <div id="listings-empty" class="empty-state hidden">
+        <span class="empty-icon">📭</span>
+        <p>Объявлений пока нет</p>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Экран: Новый пароль -->
-  <div id="new-password-screen" class="hidden screen-transition">
-    <div id="new-password-box" class="card">
-      <button class="back-btn" id="back-from-new-password" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🎯</div>
-      <h2>Новый пароль</h2>
-      <p class="card-subtitle">Придумайте новый пароль</p>
-      <form id="new-password-form" novalidate>
-        <div class="field">
-          <label for="new-password">Новый пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="new-password" placeholder="Минимум 6 символов" required autocomplete="new-password" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="confirm-new-password">Повторите пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="confirm-new-password" placeholder="Повторите пароль" required autocomplete="new-password" />
-          </div>
-        </div>
-        <div id="new-password-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="new-password-btn" class="btn btn-primary full-width">
-          Сохранить пароль
-        </button>
-      </form>
-    </div>
-  </div>
+    <!-- LISTING DETAIL -->
+    <section id="page-listing" class="page hidden">
+      <div id="listing-detail"></div>
+    </section>
 
-  <!-- Форма регистрации -->
-  <div id="register-screen" class="hidden screen-transition">
-    <div id="register-box" class="card">
-      <button class="back-btn" id="back-from-register" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">✨</div>
-      <h2>Регистрация</h2>
-      <p class="card-subtitle">Создайте новый аккаунт</p>
-      <form id="register-form" novalidate>
-        <div class="field">
-          <label for="email">Email</label>
-          <div class="input-wrap">
-            <span class="input-icon">✉</span>
-            <input type="email" id="email" placeholder="example@mail.com" required autocomplete="email" />
-          </div>
+    <!-- AUTH -->
+    <section id="page-auth" class="page hidden">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchAuthTab('login')">Вход</button>
+          <button class="auth-tab" onclick="switchAuthTab('register')">Регистрация</button>
         </div>
-        <div class="field">
-          <label for="password">Пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="password" placeholder="Минимум 6 символов" required autocomplete="new-password" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="confirm-password">Повторите пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="confirm-password" placeholder="Повторите пароль" required autocomplete="new-password" />
-          </div>
-        </div>
-        <div id="error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="submit-btn" class="btn btn-primary full-width">
-          Зарегистрироваться
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Экран подтверждения email -->
-  <div id="verify-screen" class="hidden screen-transition">
-    <div id="verify-box" class="card">
-      <button class="back-btn" id="back-from-verify" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="verify-icon">✉️</div>
-      <h2>Подтверждение email</h2>
-      <p class="verify-subtitle">Мы отправили 6-значный код на вашу почту</p>
-      <p class="verify-email" id="verify-email-display"></p>
-      <form id="verify-form" novalidate>
-        <div class="code-inputs" role="group" aria-label="Введите 6-значный код">
-          <input type="text" maxlength="1" class="code-digit" data-index="0" inputmode="numeric" autocomplete="off" aria-label="Цифра 1" />
-          <input type="text" maxlength="1" class="code-digit" data-index="1" inputmode="numeric" autocomplete="off" aria-label="Цифра 2" />
-          <input type="text" maxlength="1" class="code-digit" data-index="2" inputmode="numeric" autocomplete="off" aria-label="Цифра 3" />
-          <input type="text" maxlength="1" class="code-digit" data-index="3" inputmode="numeric" autocomplete="off" aria-label="Цифра 4" />
-          <input type="text" maxlength="1" class="code-digit" data-index="4" inputmode="numeric" autocomplete="off" aria-label="Цифра 5" />
-          <input type="text" maxlength="1" class="code-digit" data-index="5" inputmode="numeric" autocomplete="off" aria-label="Цифра 6" />
-        </div>
-        <div id="verify-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="verify-btn" class="btn btn-primary full-width">
-          Подтвердить
-        </button>
-      </form>
-      <div class="resend-section">
-        <span id="resend-timer">Отправить повторно через <span id="timer-count">60</span>с</span>
-        <button id="resend-btn" class="resend-link hidden" type="button">Отправить код повторно</button>
+        <form id="login-form" onsubmit="doLogin(event)">
+          <input type="email" id="l-email" placeholder="Email" required />
+          <input type="password" id="l-pass" placeholder="Пароль" required />
+          <div id="login-error" class="form-error hidden"></div>
+          <button type="submit" class="btn-primary">Войти</button>
+        </form>
+        <form id="register-form" class="hidden" onsubmit="doRegister(event)">
+          <input type="text" id="r-name" placeholder="Имя пользователя" required />
+          <input type="email" id="r-email" placeholder="Email" required />
+          <input type="password" id="r-pass" placeholder="Пароль (мин. 6 символов)" required />
+          <input type="password" id="r-pass2" placeholder="Повторите пароль" required />
+          <div id="register-error" class="form-error hidden"></div>
+          <button type="submit" class="btn-primary">Зарегистрироваться</button>
+        </form>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Кнопка продолжить -->
-  <div id="continue-screen" class="hidden">
-    <div class="continue-content">
-      <div class="success-icon">🎉</div>
-      <h2 class="success-title">Вы вошли!</h2>
-      <p class="success-subtitle">Добро пожаловать</p>
-      <button id="continue-btn">Продолжить →</button>
-    </div>
-  </div>
-
-  <!-- Магазин -->
-  <div id="shop-screen" class="hidden screen-transition">
-    <div class="shop-header">
-      <h1>🛒 Магазин аккаунтов</h1>
-      <button class="back-btn" id="back-from-shop" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-    </div>
-    <div class="shop-container">
-      <div class="products-grid" id="products-grid">
-        <!-- Товары будут загружены динамически -->
+    <!-- CREATE LISTING -->
+    <section id="page-create" class="page hidden">
+      <div class="create-card">
+        <h2>Новое объявление</h2>
+        <form id="create-form" onsubmit="doCreateListing(event)">
+          <input type="text" id="c-title" placeholder="Название" maxlength="100" required />
+          <textarea id="c-desc" placeholder="Описание" maxlength="2000" rows="5" required></textarea>
+          <div class="form-row">
+            <input type="text" id="c-price" placeholder="Цена (напр. 100₽ или 5 TON)" required />
+            <select id="c-category" required>
+              <option value="">Категория</option>
+            </select>
+          </div>
+          <input type="text" id="c-contact" placeholder="Контакт (Telegram, ссылка и т.д.)" />
+          <div class="file-upload">
+            <label for="c-images" class="file-label">📷 Добавить фото (до 5)</label>
+            <input type="file" id="c-images" accept="image/*" multiple style="display:none" onchange="previewImages(this)" />
+            <div id="image-previews" class="image-previews"></div>
+          </div>
+          <div id="create-error" class="form-error hidden"></div>
+          <button type="submit" class="btn-primary">Опубликовать</button>
+        </form>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <script src="work.js"></script>
+    <!-- PROFILE -->
+    <section id="page-profile" class="page hidden">
+      <div class="profile-card">
+        <h2>Мой профиль</h2>
+        <form id="profile-form" onsubmit="doUpdateProfile(event)">
+          <input type="text" id="p-username" placeholder="Имя пользователя" />
+          <input type="text" id="p-telegram" placeholder="Telegram (@username)" />
+          <div id="profile-msg" class="form-error hidden"></div>
+          <button type="submit" class="btn-primary">Сохранить</button>
+        </form>
+        <h3>Мои объявления</h3>
+        <div id="my-listings" class="listings-grid mini"></div>
+        <div id="my-listings-empty" class="empty-state hidden">
+          <p>У вас нет объявлений</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHATS -->
+    <section id="page-chats" class="page hidden">
+      <div class="chats-layout">
+        <div class="chats-sidebar" id="chats-sidebar">
+          <h2>Сообщения</h2>
+          <div id="chats-list"></div>
+          <div id="chats-empty" class="empty-state hidden">
+            <p>Нет сообщений</p>
+          </div>
+        </div>
+        <div class="chat-window" id="chat-window">
+          <div class="chat-header" id="chat-header">
+            <button class="back-btn-chat" onclick="closeChatWindow()">←</button>
+            <span id="chat-title">Выберите чат</span>
+          </div>
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-placeholder">Выберите чат слева</div>
+          </div>
+          <form class="chat-input-area hidden" id="chat-input-area" onsubmit="sendMessage(event)">
+            <input type="text" id="chat-input" placeholder="Сообщение..." maxlength="1000" />
+            <button type="submit">→</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN / MODERATION -->
+    <section id="page-admin" class="page hidden">
+      <div class="admin-card">
+        <h2>Модерация</h2>
+        <div class="admin-tabs">
+          <button class="admin-tab active" onclick="loadModeration('pending')">Ожидают</button>
+          <button class="admin-tab" onclick="loadModeration('approved')">Одобренные</button>
+          <button class="admin-tab" onclick="loadModeration('rejected')">Отклонённые</button>
+        </div>
+        <div id="admin-listings" class="listings-grid mini"></div>
+        <div id="admin-empty" class="empty-state hidden">
+          <p>Ничего нет</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
