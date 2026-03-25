@@ -7,11 +7,15 @@ npm-debug.log*
 .env.local
 .env.production
 
-# База данных (данные пользователей — никогда не в Git!)
+# База данных
 data/
 *.db
+public/data/
 users.json
 pending.json
+
+# Загрузки
+public/uploads/
 
 # macOS
 .DS_Store
