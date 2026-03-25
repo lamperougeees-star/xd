@@ -1,4 +1,33 @@
+# Зависимости
 node_modules/
+npm-debug.log*
+
+# Секреты и окружение
 .env
+.env.local
+.env.production
+
+# База данных (данные пользователей — никогда не в Git!)
+data/
+*.db
 users.json
 pending.json
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Логи
+logs/
+*.log
+
+# Временные файлы
+*.tmp
+*.temp

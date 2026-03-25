@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Yuki Shop — войди или зарегистрируйся">
-  <title>Yuki Shop</title>
+  <meta name="description" content="Не грусти — войди или зарегистрируйся">
+  <title>Не грусти</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="css/work.css" as="style">
@@ -18,7 +18,7 @@
     <div id="slider-container">
       <div class="welcome-title">
         <span class="welcome-emoji">👋</span>
-        <span class="welcome-word">Ну привет!</span>
+        <span class="welcome-word">Не грусти</span>
       </div>
       <div id="slider-track">
         <div id="slider-text">Проведи чтобы войти →</div>
@@ -72,97 +72,6 @@
         <div id="login-error-msg" class="error hidden" role="alert"></div>
         <button type="submit" id="login-btn" class="btn btn-primary full-width">
           Войти
-        </button>
-      </form>
-      <div class="forgot-section">
-        <button id="forgot-password-btn" type="button" class="resend-link">Забыли пароль?</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Экран: Забыли пароль (ввод email) -->
-  <div id="forgot-screen" class="hidden screen-transition">
-    <div id="forgot-box" class="card">
-      <button class="back-btn" id="back-from-forgot" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🔐</div>
-      <h2>Забыли пароль?</h2>
-      <p class="card-subtitle">Введите email для сброса пароля</p>
-      <form id="forgot-form" novalidate>
-        <div class="field">
-          <label for="forgot-email">Email</label>
-          <div class="input-wrap">
-            <span class="input-icon">✉</span>
-            <input type="email" id="forgot-email" placeholder="example@mail.com" required autocomplete="email" />
-          </div>
-        </div>
-        <div id="forgot-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="forgot-btn" class="btn btn-primary full-width">
-          Отправить код
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Экран: Ввод кода сброса -->
-  <div id="reset-code-screen" class="hidden screen-transition">
-    <div id="reset-code-box" class="card">
-      <button class="back-btn" id="back-from-reset-code" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🔏</div>
-      <h2>Введите код</h2>
-      <p class="card-subtitle">Мы отправили код на вашу почту</p>
-      <p class="verify-email" id="reset-email-display"></p>
-      <form id="reset-code-form" novalidate>
-        <div class="code-inputs" role="group" aria-label="Введите 6-значный код">
-          <input type="text" maxlength="1" class="code-digit" data-index="0" inputmode="numeric" autocomplete="off" aria-label="Цифра 1" />
-          <input type="text" maxlength="1" class="code-digit" data-index="1" inputmode="numeric" autocomplete="off" aria-label="Цифра 2" />
-          <input type="text" maxlength="1" class="code-digit" data-index="2" inputmode="numeric" autocomplete="off" aria-label="Цифра 3" />
-          <input type="text" maxlength="1" class="code-digit" data-index="3" inputmode="numeric" autocomplete="off" aria-label="Цифра 4" />
-          <input type="text" maxlength="1" class="code-digit" data-index="4" inputmode="numeric" autocomplete="off" aria-label="Цифра 5" />
-          <input type="text" maxlength="1" class="code-digit" data-index="5" inputmode="numeric" autocomplete="off" aria-label="Цифра 6" />
-        </div>
-        <div id="reset-code-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="reset-code-btn" class="btn btn-primary full-width">
-          Продолжить
-        </button>
-      </form>
-      <div class="resend-section">
-        <span id="reset-resend-timer">Отправить повторно через <span id="reset-timer-count">60</span>с</span>
-        <button id="reset-resend-btn" class="resend-link hidden" type="button">Отправить код повторно</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Экран: Новый пароль -->
-  <div id="new-password-screen" class="hidden screen-transition">
-    <div id="new-password-box" class="card">
-      <button class="back-btn" id="back-from-new-password" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-      <div class="card-icon">🎯</div>
-      <h2>Новый пароль</h2>
-      <p class="card-subtitle">Придумайте новый пароль</p>
-      <form id="new-password-form" novalidate>
-        <div class="field">
-          <label for="new-password">Новый пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="new-password" placeholder="Минимум 6 символов" required autocomplete="new-password" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="confirm-new-password">Повторите пароль</label>
-          <div class="input-wrap">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="confirm-new-password" placeholder="Повторите пароль" required autocomplete="new-password" />
-          </div>
-        </div>
-        <div id="new-password-error-msg" class="error hidden" role="alert"></div>
-        <button type="submit" id="new-password-btn" class="btn btn-primary full-width">
-          Сохранить пароль
         </button>
       </form>
     </div>
@@ -248,19 +157,11 @@
     </div>
   </div>
 
-  <!-- Магазин -->
-  <div id="shop-screen" class="hidden screen-transition">
-    <div class="shop-header">
-      <h1>🛒 Магазин аккаунтов</h1>
-      <button class="back-btn" id="back-from-shop" aria-label="Назад">
-        <span>←</span> Назад
-      </button>
-    </div>
-    <div class="shop-container">
-      <div class="products-grid" id="products-grid">
-        <!-- Товары будут загружены динамически -->
-      </div>
-    </div>
+  <!-- Страшный экран -->
+  <div id="scary-screen" class="hidden">
+    <div id="blood-container"></div>
+    <div id="scary-text">ТЫ УЖЕ НЕ ВЫЙДЕШЬ</div>
+    <div id="scary-eyes">👁️ 👁️</div>
   </div>
 
   <script src="work.js"></script>

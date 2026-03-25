@@ -1,0 +1,39 @@
+# systemd service для сайта "Не грусти"
+# Путь: /etc/systemd/system/ne-grusti.service
+#
+# Команды управления:
+#   sudo systemctl enable ne-grusti   # автозапуск при старте сервера
+#   sudo systemctl start ne-grusti    # запуск
+#   sudo systemctl stop ne-grusti     # остановка
+#   sudo systemctl restart ne-grusti  # перезапуск
+#   sudo systemctl status ne-grusti   # статус
+#   journalctl -u ne-grusti -f        # просмотр логов в реальном времени
+
+[Unit]
+Description=Ne Grusti - Node.js Web App
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+
+WorkingDirectory=/var/www/ne-grusti
+ExecStart=/usr/bin/node work.cs
+
+# Автоперезапуск при краше
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ne-grusti
+
+# Переменные окружения
+EnvironmentFile=/var/www/ne-grusti/.env
+
+# Безопасность
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
